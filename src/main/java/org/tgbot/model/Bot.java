@@ -8,8 +8,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class Bot extends TelegramLongPollingBot {
 
-    private String botUsername = "UfanetApprovalApplicationBot";
-    private String botToken = "6230219510:AAEhCAZN7YRDLLBU2cPIKo2v18lg3NL83aw";
+//    private String botUsername = "UfanetApprovalApplicationBot";
+//    private String botToken = "6230219510:AAEhCAZN7YRDLLBU2cPIKo2v18lg3NL83aw";
+    private String botUsername = "NeverKetBot";
+    private String botToken = "5848728893:AAENlDxAuca7sJZtKc5rvUy-b00T0ecVOjg";
 
     @Override
     public String getBotUsername() {
