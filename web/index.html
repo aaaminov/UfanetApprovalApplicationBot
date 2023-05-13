@@ -121,19 +121,28 @@
     }
 
     function check_visibility_main_button() {
-        if (description.value.length == 0){
-            if (tg.MainButton.isVisible){
-                tg.MainButton.hide();
-            }
-        }
-        else if (get_selected_approvers().length == 0){
-            if (tg.MainButton.isVisible){
-                tg.MainButton.hide();
-            }
-        } else {
-            tg.MainButton.show();
+        // if (description.value.length == 0){
+        //     if (tg.MainButton.isVisible){
+        //         tg.MainButton.hide();
+        //     }
+        // }
+        // else if (get_selected_approvers().length == 0){
+        //     if (tg.MainButton.isVisible){
+        //         tg.MainButton.hide();
+        //     }
+        // } else {
+        //     if (!tg.MainButton.isVisible){
+        //         tg.MainButton.show();
+        //     }
+        // }
+
+        if (description.value.length != 0 && get_selected_approvers().length != 0) {
             if (!tg.MainButton.isVisible){
                 tg.MainButton.show();
+            }
+        }else{
+            if (tg.MainButton.isVisible){
+                tg.MainButton.hide();
             }
         }
     }
@@ -145,7 +154,8 @@
     });
     approvers.addEventListener('change', function(e) {
         check_visibility_main_button();
-        description.value = e.target.value;
+        // description.value = e.target.value;
+        description.value = get_selected_approvers().toString();
     });
 
 
