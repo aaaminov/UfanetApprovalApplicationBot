@@ -63,8 +63,8 @@
 <body class="gray">
 
     <div>
-        <p class="hint">Мин. количество символов 10</p>
         <input id="description" type="text" placeholder="Описание заявки" />
+        <p id="description_length" class="hint"></p>
     </div>
 
     <div>
@@ -94,21 +94,18 @@
     tg.MainButton.hide()
 
     let description = document.getElementById("description");
+    let description_length = document.getElementById("description_length");
 
     description.addEventListener('input', function (e) {
-        const text = this.value;
-        if (text.length >= 10) {
-            if (!tg.MainButton.isVisible) {
-                tg.MainButton.show();
-            }
-        } else {
-            if (tg.MainButton.isVisible) {
-                tg.MainButton.hide();
-            }
+        if (text.length >= 1 && !tg.MainButton.isVisible) {
+            tg.MainButton.show();
+        } else if (tg.MainButton.isVisible) {
+            tg.MainButton.hide();
         }
+        description_length.value = `${this.value.length}/256`;
     });
 
-
+    
 
 
     // tg.expand(); //расширяем на все окно  
@@ -119,28 +116,28 @@
     // tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
     // tg.MainButton.setParams({ "color": "#143F6B" }); //так изменяются все параметры
 
-    let btn = document.getElementById("btn"); //получаем кнопку скрыть/показать 
+    // let btn = document.getElementById("btn"); //получаем кнопку скрыть/показать 
 
-    btn.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
-        if (tg.MainButton.isVisible) { //если кнопка показана 
-            tg.MainButton.hide() //скрываем кнопку 
-        }
-        else { //иначе
-            tg.MainButton.show() //показываем 
-        }
-    });
+    // btn.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
+    //     if (tg.MainButton.isVisible) { //если кнопка показана 
+    //         tg.MainButton.hide() //скрываем кнопку 
+    //     }
+    //     else { //иначе
+    //         tg.MainButton.show() //показываем 
+    //     }
+    // });
 
-    let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
-    btnED.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
-        if (tg.MainButton.isActive) { //если кнопка показана 
-            tg.MainButton.setParams({ "color": "#E0FFFF" }); //меняем цвет
-            tg.MainButton.disable() //скрываем кнопку 
-        }
-        else { //иначе
-            tg.MainButton.setParams({ "color": "#143F6B" }); //меняем цвет
-            tg.MainButton.enable() //показываем 
-        }
-    });
+    // let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
+    // btnED.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
+    //     if (tg.MainButton.isActive) { //если кнопка показана 
+    //         tg.MainButton.setParams({ "color": "#E0FFFF" }); //меняем цвет
+    //         tg.MainButton.disable() //скрываем кнопку 
+    //     }
+    //     else { //иначе
+    //         tg.MainButton.setParams({ "color": "#143F6B" }); //меняем цвет
+    //         tg.MainButton.enable() //показываем 
+    //     }
+    // });
 
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
         tg.sendData("some string that we need to send");
