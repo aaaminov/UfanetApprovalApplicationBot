@@ -108,15 +108,6 @@
 
     description.addEventListener('input', function (e) {
         let text = this.value;
-        if (text.length >= 1) {
-            if (!tg.MainButton.isVisible) {
-                tg.MainButton.show();
-            }
-        } else {
-            if (tg.MainButton.isVisible) {
-                tg.MainButton.hide();
-            }
-        }
         description_length.innerHTML = `${text.length.toString()}/${description_max_length}`;
         check_visibility_main_button();
     });
