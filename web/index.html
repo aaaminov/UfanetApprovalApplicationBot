@@ -25,12 +25,12 @@
 <!-- css -->
 <style>
     body {
-        color: var(--tg-theme-text-color);
         background: var(--tg-theme-bg-color);
+        color: var(--tg-theme-text-color);
         display: flex;
         flex-direction: column;
         align-items: center;
-        font-size: 28px;
+        font-size: 18px;
     }
 
     .hint {
@@ -55,15 +55,16 @@
     #usercard {
         text-align: center;
     }
-
 </style>
 
 
 <!-- content -->
+
 <body class="gray">
 
     <div>
-        <input type="text" placeholder="Описание заявки" />
+        <p class="hint">Мин. количество символов 10</p>
+        <input id="description" type="text" placeholder="Описание заявки" />
     </div>
 
     <div>
@@ -89,38 +90,56 @@
 
 <!-- js -->
 <script>
-    let tg = window.Telegram.WebApp; //получаем объект webapp телеграма 
+    let tg = window.Telegram.WebApp; //получаем объект WebApp телеграма
+    tg.MainButton.hide()
 
-    tg.expand(); //расширяем на все окно  
+    let description = document.getElementById("description");
 
-    tg.MainButton.text = "Changed Text"; //изменяем текст кнопки 
-    tg.MainButton.setText("Changed Text1"); //изменяем текст кнопки иначе
-    tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
-    tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
-    tg.MainButton.setParams({ "color": "#143F6B" }); //так изменяются все параметры
-
-    let btn = document.getElementById("btn"); //получаем кнопку скрыть/показать 
-
-    btn.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
-        if (tg.MainButton.isVisible) { //если кнопка показана 
-            tg.MainButton.hide() //скрываем кнопку 
-        }
-        else { //иначе
-            tg.MainButton.show() //показываем 
+    description.addEventListener('input', function (e) {
+        const text = this.value;
+        if (text.length >= 10) {
+            if (!tg.MainButton.isVisible) {
+                tg.MainButton.show();
+            }
+        } else {
+            if (tg.MainButton.isVisible) {
+                tg.MainButton.hide();
+            }
         }
     });
 
-    let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
-    btnED.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
-        if (tg.MainButton.isActive) { //если кнопка показана 
-            tg.MainButton.setParams({ "color": "#E0FFFF" }); //меняем цвет
-            tg.MainButton.disable() //скрываем кнопку 
-        }
-        else { //иначе
-            tg.MainButton.setParams({ "color": "#143F6B" }); //меняем цвет
-            tg.MainButton.enable() //показываем 
-        }
-    });
+
+
+    // tg.expand(); //расширяем на все окно  
+
+    // tg.MainButton.text = "Changed Text"; //изменяем текст кнопки 
+    // tg.MainButton.setText("Changed Text1"); //изменяем текст кнопки иначе
+    // tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
+    // tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
+    // tg.MainButton.setParams({ "color": "#143F6B" }); //так изменяются все параметры
+
+    // let btn = document.getElementById("btn"); //получаем кнопку скрыть/показать 
+
+    // btn.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
+    //     if (tg.MainButton.isVisible) { //если кнопка показана 
+    //         tg.MainButton.hide() //скрываем кнопку 
+    //     }
+    //     else { //иначе
+    //         tg.MainButton.show() //показываем 
+    //     }
+    // });
+
+    // let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
+    // btnED.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
+    //     if (tg.MainButton.isActive) { //если кнопка показана 
+    //         tg.MainButton.setParams({ "color": "#E0FFFF" }); //меняем цвет
+    //         tg.MainButton.disable() //скрываем кнопку 
+    //     }
+    //     else { //иначе
+    //         tg.MainButton.setParams({ "color": "#143F6B" }); //меняем цвет
+    //         tg.MainButton.enable() //показываем 
+    //     }
+    // });
 
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
         tg.sendData("some string that we need to send");
@@ -142,10 +161,10 @@
     usercard.appendChild(userid); //добавляем
 
 
-        //работает только в attachment menu
-        // let pic = document.createElement('img'); //создаем img
-        // pic.src = tg.initDataUnsafe.user.photo_url; //задаём src
-        // usercard.appendChild(pic); //добавляем элемент в карточку 
+    //работает только в attachment menu
+    // let pic = document.createElement('img'); //создаем img
+    // pic.src = tg.initDataUnsafe.user.photo_url; //задаём src
+    // usercard.appendChild(pic); //добавляем элемент в карточку 
 </script>
 
 </html>
