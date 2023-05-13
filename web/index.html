@@ -63,12 +63,13 @@
 <body class="gray">
 
     <div>
-        <input id="description" type="text" placeholder="Описание заявки" />
-        <label id="description_length" class="hint"></label>
+        <h3>Описание заявки</h3>
+        <input id="description" type="text" placeholder="Текст" />
+        <p id="description_length" class="hint"></p>
     </div>
 
     <div>
-        <label class="hint">Согласователи</label>
+        <h3>Согласователи</h3>
         <select id="approvers" multiple>
             <option value="1002202976">
                 <img>
@@ -81,14 +82,14 @@
         </select>
     </div>
 
-    <div>
+    <!-- <div>
         <p>test:</p>
         <div id="usercard"></div>
         <a class="link" href="#">Link</a>
         <p class="hint">Some little hint</p>
         <button id="btn" class="button">Show/Hide Main Button</button>
         <button id="btnED" class="button">Enable/Disable Main Button</button>
-    </div>
+    </div> -->
 
 
 </body>
@@ -106,15 +107,9 @@
     let description_length = document.getElementById("description_length");
     description_length.innerHTML = `0/${description_max_length}`;
 
-    description.addEventListener('input', function (e) {
-        let text = this.value;
-        description_length.innerHTML = `${text.length.toString()}/${description_max_length}`;
-        check_visibility_main_button();
-    });
-
 
     let approvers = document.getElementById("approvers");
-
+    
     function get_selected_approvers() {
         var selected = [];
         for (var option of approvers.options) {
@@ -135,7 +130,16 @@
             tg.MainButton.show();
         }
     }
-    approvers.onchange = check_visibility_main_button();
+
+    description.addEventListener('input', function (e) {
+        let text = this.value;
+        description_length.innerHTML = `${text.length.toString()}/${description_max_length}`;
+        check_visibility_main_button();
+    });
+    approvers.addEventListener('onchange', function(e) {
+        check_visibility_main_button();
+    });
+
 
     // tg.expand(); //расширяем на все окно  
 
@@ -181,18 +185,18 @@
     });
 
 
-    let usercard = document.getElementById("usercard"); //получаем блок usercard 
+    // let usercard = document.getElementById("usercard"); //получаем блок usercard 
 
-    let profName = document.createElement('p'); //создаем параграф
-    profName.innerText = `${tg.initDataUnsafe.user.first_name}
-        ${tg.initDataUnsafe.user.last_name}
-        ${tg.initDataUnsafe.user.username} (${tg.initDataUnsafe.user.language_code})`;
-    //выдем имя, "фамилию", через тире username и код языка
-    usercard.appendChild(profName); //добавляем 
+    // let profName = document.createElement('p'); //создаем параграф
+    // profName.innerText = `${tg.initDataUnsafe.user.first_name}
+    //     ${tg.initDataUnsafe.user.last_name}
+    //     ${tg.initDataUnsafe.user.username} (${tg.initDataUnsafe.user.language_code})`;
+    // //выдем имя, "фамилию", через тире username и код языка
+    // usercard.appendChild(profName); //добавляем 
 
-    let userid = document.createElement('p'); //создаем еще параграф 
-    userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
-    usercard.appendChild(userid); //добавляем
+    // let userid = document.createElement('p'); //создаем еще параграф 
+    // userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
+    // usercard.appendChild(userid); //добавляем
 
 
     //работает только в attachment menu
