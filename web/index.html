@@ -98,6 +98,7 @@
     description_length.innerHTML = `0/256`;
 
     description.addEventListener('input', function (e) {
+        let text = this.value;
         if (text.length >= 1) {
             if (!tg.MainButton.isVisible) {
                 tg.MainButton.show();
@@ -107,7 +108,7 @@
                 tg.MainButton.hide();
             }
         }
-        description_length.innerHTML = `${this.value.length.toString()}/256`;
+        description_length.innerHTML = `${text.length.toString()}/256`;
     });
 
     
