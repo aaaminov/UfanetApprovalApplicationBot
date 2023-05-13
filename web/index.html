@@ -64,24 +64,18 @@
 
     <div>
         <input id="description" type="text" placeholder="Описание заявки" />
-        <div
-            class="input"
-            contenteditable="true"
-            data-placeholder="Описание заявки 2"
-            id="text_field"
-        ></div>
-        <p id="description_length" class="hint"></p>
+        <label id="description_length" class="hint"></label>
     </div>
 
     <div>
-        <p class="hint">Согласователи</p>
+        <label class="hint">Согласователи</label>
         <select id="approvers" multiple>
             <option value="1002202976">
-                <img >
+                <img>
                 <p>@neverket - Arslan</p>
             </option>
             <option value="857862919">
-                <img >
+                <img>
                 <p>@aaaaminov - Arslan</p>
             </option>
         </select>
@@ -124,15 +118,33 @@
             }
         }
         description_length.innerHTML = `${text.length.toString()}/${description_max_length}`;
+        check_visibility_main_button();
     });
 
-    // let approvers = document.getElementById("approvers");
-    // for (let i = 0; i < approvers.length; i++) {
-        
-    // }
-    
-    
 
+    let approvers = document.getElementById("approvers");
+
+    function get_selected_approvers() {
+        var selected = [];
+        for (var option of approvers.options) {
+            if (option.selected) {
+                selected.push(option.value);
+            }
+        }
+        return selected;
+    }
+
+    function check_visibility_main_button() {
+        if (description.value.length == 0){
+            tg.MainButton.hide();
+        }
+        else if (get_selected_approvers().length == 0){
+            tg.MainButton.hide();
+        } else {
+            tg.MainButton.show();
+        }
+    }
+    approvers.onchange = check_visibility_main_button();
 
     // tg.expand(); //расширяем на все окно  
 
@@ -166,7 +178,14 @@
     // });
 
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
-        tg.sendData("some string that we need to send");
+        if (description.value.length == 0){
+            return;
+        }
+        else if (get_selected_approvers().length == 0){
+            return;
+        } else {
+            tg.sendData(`${get_selected_approvers()}.${description.value}`);
+        }
         //при клике на основную кнопку отправляем данные в строковом виде
     });
 

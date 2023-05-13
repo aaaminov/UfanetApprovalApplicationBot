@@ -4,6 +4,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.webapp.WebAppData;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.tgbot.db.DbConnection;
 
@@ -35,6 +36,11 @@ public class Bot extends TelegramLongPollingBot {
             }
         } else {
             sendMessage(message.getFrom().getId(), message.getText());
+        }
+
+        WebAppData webAppData = message.getWebAppData();
+        if (webAppData != null){
+            System.out.println(webAppData);
         }
 
     }
