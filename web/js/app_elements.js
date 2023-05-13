@@ -2,6 +2,8 @@
  * This part of code is used to initialize the demo app and set up the event handlers we need.
  */
 
+import {DemoApp} from "api.js";
+
 Telegram.WebApp.onEvent('themeChanged', function() {
     document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
 });
