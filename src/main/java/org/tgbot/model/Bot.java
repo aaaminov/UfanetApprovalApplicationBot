@@ -60,6 +60,8 @@ public class Bot extends TelegramLongPollingBot {
                     keyboardRow.add(button);
                     keyboardRows.add( keyboardRow);
                     replyKeyboardMarkup.setKeyboard(keyboardRows);
+                    replyKeyboardMarkup.setResizeKeyboard(true);
+                    replyKeyboardMarkup.setSelective(true);
                     sendMessage.setReplyMarkup(replyKeyboardMarkup);
                     try {
                         execute(sendMessage);
