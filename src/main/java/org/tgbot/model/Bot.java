@@ -35,18 +35,19 @@ public class Bot extends TelegramLongPollingBot {
 
         Message message = update.getMessage();
         if (message.isCommand()) {
-            if (message.getText().equals("/approvers")) { // If the command was /scream, we switch gears
+            if (message.getText().equals("/approvers")) { 
                 sendApprovers(message.getFrom().getId());
+                return;
             }
-        } else {
-            sendMessage(message.getFrom().getId(), message.getText());
         }
 
+        
         WebAppData webAppData = message.getWebAppData();
         if (webAppData != null) {
             System.out.println(webAppData);
         }
 
+        sendMessage(message.getFrom().getId(), message.getText());
     }
 
     public void sendMessage(Long userId, String msg) {
