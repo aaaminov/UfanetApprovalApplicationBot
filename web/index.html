@@ -122,12 +122,19 @@
 
     function check_visibility_main_button() {
         if (description.value.length == 0){
-            tg.MainButton.hide();
+            if (tg.MainButton.isVisible){
+                tg.MainButton.hide();
+            }
         }
         else if (get_selected_approvers().length == 0){
-            tg.MainButton.hide();
+            if (tg.MainButton.isVisible){
+                tg.MainButton.hide();
+            }
         } else {
             tg.MainButton.show();
+            if (!tg.MainButton.isVisible){
+                tg.MainButton.show();
+            }
         }
     }
 
