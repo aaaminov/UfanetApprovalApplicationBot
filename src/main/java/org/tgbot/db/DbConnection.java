@@ -32,7 +32,7 @@ public class DbConnection {
     }
 
     public void saveSubscriber(User user) {
-        System.out.println(getSubscribersId().toString());
+        System.out.println("subscribers = " + getSubscribersId().toString());
 
         String query = "INSERT INTO `tg_bot`.`subscribers` (`id`, `date`) VALUES ('" + user.getId()
                 + "', CURRENT_TIMESTAMP);";

@@ -29,7 +29,7 @@ public class Bot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         User from = update.getMessage().getFrom();
-        if (!DbConnection.instance.getSubscribersId().contains(from)) {
+        if (!DbConnection.instance.getSubscribersId().contains(from.getId())) {
             DbConnection.instance.saveSubscriber(from);
         }
 
