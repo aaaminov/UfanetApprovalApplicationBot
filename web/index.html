@@ -153,9 +153,10 @@
         check_visibility_main_button();
     });
     approvers.addEventListener('change', function(e) {
-        check_visibility_main_button();
         // description.value = e.target.value;
         description.value = get_selected_approvers().toString();
+        check_visibility_main_button();
+        document.focus();
     });
 
 
