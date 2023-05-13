@@ -9,7 +9,7 @@ body {
     color-scheme: var(--tg-color-scheme);
 }
 body.gray {
-    background-color: var(--tg-theme-secondary-bg-color, #efefef);
+    background-color: var(--tg-theme-secondary-bg-color, #f03030);
 }
 
 a {
