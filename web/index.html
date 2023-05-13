@@ -64,7 +64,7 @@
 
     <div>
         <input id="description" type="text" placeholder="Описание заявки" />
-        <p id="description_length" class="hint">0</p>
+        <p id="description_length" class="hint"></p>
     </div>
 
     <div>
@@ -95,7 +95,7 @@
 
     let description = document.getElementById("description");
     let description_length = document.getElementById("description_length");
-    description_length.value = `0/256`;
+    description_length.innerHTML = `0/256`;
 
     description.addEventListener('input', function (e) {
         if (text.length >= 1) {
@@ -107,7 +107,7 @@
                 tg.MainButton.hide();
             }
         }
-        description_length.value = `${this.value.length}/256`;
+        description_length.innerHTML = `${this.value.length}/256`;
     });
 
     
