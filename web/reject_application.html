@@ -59,6 +59,7 @@
 
 
 <!-- content -->
+
 <body class="gray">
 
     <div>
@@ -67,9 +68,9 @@
         <p id="reason_length" class="hint"></p>
     </div>
 
-    
+
     <div>
-        <p id="tg_info" ></p>
+        <p id="tg_info"></p>
     </div>
 
 </body>
@@ -89,11 +90,11 @@
 
     function check_visibility_main_button() {
         if (reason.value.length != 0) {
-            if (!tg.MainButton.isVisible){
+            if (!tg.MainButton.isVisible) {
                 tg.MainButton.show();
             }
-        }else{
-            if (tg.MainButton.isVisible){
+        } else {
+            if (tg.MainButton.isVisible) {
                 tg.MainButton.hide();
             }
         }
@@ -107,10 +108,10 @@
 
 
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
-        if (reason.value.length == 0){
+        if (reason.value.length == 0) {
             return;
         }
-        else if (get_selected_approvers().length == 0){
+        else if (get_selected_approvers().length == 0) {
             return;
         } else {
             let data = {
@@ -119,13 +120,42 @@
             tg.answerWebAppQuery();
             // tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
         }
-        
+
     });
 
 
     let tg_info = document.getElementById("tg_info");
-    tg_info.innerHTML = tg.initData
 
+    let initDataURLSP = new URLSearchParams(WebApp.initData);
+    var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
+
+    tg_info.innerHTML = `${tg.WebAppInitData.query_id}\n${checkDataString}`
+
+
+    // пример проверки безопасности
+
+    // let initDataURLSP = new URLSearchParams(WebApp.initData);
+    // var hash = initDataURLSP.get('hash');
+
+    // initDataURLSP.delete('hash');
+    // initDataURLSP.sort();
+    // var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
+
+    // let xhrURL = new URL('https://<your_domain>/<userIsValid>');
+    // xhrURL.searchParams.set('hash', hash);
+    // xhrURL.searchParams.set('checkDataString', checkDataString);
+
+    // let xhr = new XMLHttpRequest();
+    // xhr.open('GET', xhrURL);
+    // xhr.send();
+    // xhr.onload = function () {
+    //     if (JSON.parse(xhr.response).result == true) {
+    //         WebApp.showAlert(`Добро пожаловать, @${WebApp.WebAppUser.username}.`);
+    //     } else {
+    //         WebApp.showAlert("Ты что, хакер?");
+    //         WebApp.close();
+    //     }
+    // }
 
 </script>
 
