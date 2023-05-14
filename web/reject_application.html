@@ -130,14 +130,14 @@
     let tg_info1 = document.getElementById("tg_info1");
     let tg_info2 = document.getElementById("tg_info2");
 
-    let initDataURLSP = new URLSearchParams(tg.WebApp.initData);
+    let initDataURLSP = new URLSearchParams(tg.initData);
     var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
 
-    tg_info1.innerHTML = tg.WebApp.initData;
+    tg_info1.innerHTML = tg.initData;
     tg_info1.innerHTML = tg.WebAppInitData;
     tg_info2.innerHTML = checkDataString;
 
-    alert(tg.WebApp.initData);
+    alert(tg.initData);
 
     // пример проверки безопасности
 
