@@ -66,7 +66,18 @@ public class Bot extends TelegramLongPollingBot {
         if (webAppData != null) {
             System.out.println(webAppData);
 
-            sendText(message.getFrom().getId(), message.getText());
+            if (webAppData.getButtonText().equals(keyboardButtonText)) {
+                String[] data = webAppData.getData().split(".", 2);
+
+                String[] approvers = data[0].split(",");
+                String description = data[1];
+
+                for (int i = 0; i < approvers.length; i++) {
+                    Long approverId = Long.valueOf(approvers[i]);
+                    
+                    sendText(approverId, description);
+                }
+            }
             return;
         }
 
