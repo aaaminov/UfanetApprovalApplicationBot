@@ -68,14 +68,26 @@
     #usercard {
         text-align: center;
     }
+
+    .bg_primary {
+        background-color: var(--tg-theme-bg-color);
+    }
+    .ptb-1r {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
 </style>
 
 
 <!-- content -->
 
 <body class="gray">
-    <div>
+
+    <div class="bg_primary ptb-1r">
         <h3>Причина отказа</h3>
+    </div>
+
+    <div>
         <input id="reason" type="text" placeholder="Текст" />
         <p id="reason_length" class="hint"></p>
     </div>
