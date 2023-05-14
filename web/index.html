@@ -198,7 +198,14 @@
         else if (get_selected_approvers().length == 0){
             return;
         } else {
-            tg.sendData(`${get_selected_approvers()}.${description.value}`);
+            // tg.sendData(`${get_selected_approvers()}.${description.value}`);
+
+            let data = {
+                apr: get_selected_approvers(),
+                des: description.value
+            }
+
+            tg.sendData(JSON.stringify(data));
         }
         //при клике на основную кнопку отправляем данные в строковом виде
     });

@@ -3,6 +3,7 @@ package org.tgbot.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -64,19 +65,30 @@ public class Bot extends TelegramLongPollingBot {
         // web app
         WebAppData webAppData = message.getWebAppData();
         if (webAppData != null) {
-            System.out.println(webAppData);
+            System.out.println("webAppData = " + webAppData);
 
             if (webAppData.getButtonText().equals(keyboardButtonText)) {
-                String[] data = webAppData.getData().split(".", 2);
+                // String dataStr = webAppData.getData();
+                // System.out.println("dataStr = " + dataStr);
 
-                String[] approvers = data[0].split(",");
-                String description = data[1];
+                // String[] data = webAppData.getData().split(".", 2);
+                // System.out.println("data = " + data.toString());
 
-                for (int i = 0; i < approvers.length; i++) {
-                    Long approverId = Long.valueOf(approvers[i]);
+                // String[] approvers = data[0].split(",");
+                // System.out.println("approvers = " + approvers.toString());
+                
+                // String description = data[1];
+                // System.out.println("description = " + description);
+
+                // for (int i = 0; i < approvers.length; i++) {
+                //     Long approverId = Long.valueOf(approvers[i]);
+                //     System.out.println("approverId = " + approverId);
                     
-                    sendText(approverId, description);
-                }
+                //     sendText(approverId, description);
+                // }
+
+                JSONObject data = new JSONObject(webAppData.getData());
+                
             }
             return;
         }
