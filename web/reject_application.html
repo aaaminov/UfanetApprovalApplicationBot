@@ -59,38 +59,13 @@
 
 
 <!-- content -->
-
 <body class="gray">
 
     <div>
-        <h3>reject_application</h3>
-        <input id="description" type="text" placeholder="Текст" />
-        <p id="description_length" class="hint"></p>
+        <h3>Причина отказа</h3>
+        <input id="reason" type="text" placeholder="Текст" />
+        <p id="reason_length" class="hint"></p>
     </div>
-
-    <div>
-        <h3>reject_application lol</h3>
-        <select id="approvers" multiple>
-            <option value="1002202976">
-                <img>
-                <p>@neverket - Arslan</p>
-            </option>
-            <option value="857862919">
-                <img>
-                <p>@aaaaminov - Arslan</p>
-            </option>
-        </select>
-    </div>
-
-    <!-- <div>
-        <p>test:</p>
-        <div id="usercard"></div>
-        <a class="link" href="#">Link</a>
-        <p class="hint">Some little hint</p>
-        <button id="btn" class="button">Show/Hide Main Button</button>
-        <button id="btnED" class="button">Enable/Disable Main Button</button>
-    </div> -->
-
 
 </body>
 
@@ -100,43 +75,15 @@
     let tg = window.Telegram.WebApp; //получаем объект WebApp телеграма
     tg.MainButton.hide()
 
-    let description = document.getElementById("description");
-    description.focus();
+    let reason = document.getElementById("reason");
+    reason.focus();
 
-    let description_max_length = 256 // max desc length
-    let description_length = document.getElementById("description_length");
-    description_length.innerHTML = `0/${description_max_length}`;
-
-
-    let approvers = document.getElementById("approvers");
-    
-    function get_selected_approvers() {
-        var selected = [];
-        for (var option of approvers.options) {
-            if (option.selected) {
-                selected.push(option.value);
-            }
-        }
-        return selected;
-    }
+    let reason_max_length = 256 // max desc length
+    let reason_length = document.getElementById("reason_length");
+    reason_length.innerHTML = `0/${reason_max_length}`;
 
     function check_visibility_main_button() {
-        // if (description.value.length == 0){
-        //     if (tg.MainButton.isVisible){
-        //         tg.MainButton.hide();
-        //     }
-        // }
-        // else if (get_selected_approvers().length == 0){
-        //     if (tg.MainButton.isVisible){
-        //         tg.MainButton.hide();
-        //     }
-        // } else {
-        //     if (!tg.MainButton.isVisible){
-        //         tg.MainButton.show();
-        //     }
-        // }
-
-        if (description.value.length != 0 && get_selected_approvers().length != 0) {
+        if (reason.value.length != 0) {
             if (!tg.MainButton.isVisible){
                 tg.MainButton.show();
             }
@@ -147,88 +94,28 @@
         }
     }
 
-    description.addEventListener('input', function (e) {
+    reason.addEventListener('input', function (e) {
         let text = this.value;
-        description_length.innerHTML = `${text.length.toString()}/${description_max_length}`;
+        reason_length.innerHTML = `${text.length.toString()}/${reason_max_length}`;
         check_visibility_main_button();
     });
-    approvers.addEventListener('change', function(e) {
-        // description.value = e.target.value;
-        // description.value = get_selected_approvers().toString();
-        check_visibility_main_button();
-        document.focus();
-    });
 
-
-    // tg.expand(); //расширяем на все окно  
-
-    // tg.MainButton.text = "Changed Text"; //изменяем текст кнопки 
-    // tg.MainButton.setText("Changed Text1"); //изменяем текст кнопки иначе
-    // tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
-    // tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
-    // tg.MainButton.setParams({ "color": "#143F6B" }); //так изменяются все параметры
-
-    // let btn = document.getElementById("btn"); //получаем кнопку скрыть/показать 
-
-    // btn.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
-    //     if (tg.MainButton.isVisible) { //если кнопка показана 
-    //         tg.MainButton.hide() //скрываем кнопку 
-    //     }
-    //     else { //иначе
-    //         tg.MainButton.show() //показываем 
-    //     }
-    // });
-
-    // let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
-    // btnED.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
-    //     if (tg.MainButton.isActive) { //если кнопка показана 
-    //         tg.MainButton.setParams({ "color": "#E0FFFF" }); //меняем цвет
-    //         tg.MainButton.disable() //скрываем кнопку 
-    //     }
-    //     else { //иначе
-    //         tg.MainButton.setParams({ "color": "#143F6B" }); //меняем цвет
-    //         tg.MainButton.enable() //показываем 
-    //     }
-    // });
 
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
-        if (description.value.length == 0){
+        if (reason.value.length == 0){
             return;
         }
         else if (get_selected_approvers().length == 0){
             return;
         } else {
-            // tg.sendData(`${get_selected_approvers()}.${description.value}`);
-
             let data = {
-                apr: get_selected_approvers(),
-                des: description.value
+                rea: reason.value
             }
 
-            tg.sendData(JSON.stringify(data));
+            tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
         }
-        //при клике на основную кнопку отправляем данные в строковом виде
+        
     });
-
-
-    // let usercard = document.getElementById("usercard"); //получаем блок usercard 
-
-    // let profName = document.createElement('p'); //создаем параграф
-    // profName.innerText = `${tg.initDataUnsafe.user.first_name}
-    //     ${tg.initDataUnsafe.user.last_name}
-    //     ${tg.initDataUnsafe.user.username} (${tg.initDataUnsafe.user.language_code})`;
-    // //выдем имя, "фамилию", через тире username и код языка
-    // usercard.appendChild(profName); //добавляем 
-
-    // let userid = document.createElement('p'); //создаем еще параграф 
-    // userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
-    // usercard.appendChild(userid); //добавляем
-
-
-    //работает только в attachment menu
-    // let pic = document.createElement('img'); //создаем img
-    // pic.src = tg.initDataUnsafe.user.photo_url; //задаём src
-    // usercard.appendChild(pic); //добавляем элемент в карточку 
 </script>
 
 </html>

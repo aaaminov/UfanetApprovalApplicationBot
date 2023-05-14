@@ -8,6 +8,8 @@ import org.json.JSONObject;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -59,11 +61,13 @@ public class Bot extends TelegramLongPollingBot {
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
 
-            buttonTap(
-                    callbackQuery.getFrom().getId(),
-                    callbackQuery.getId(),
-                    callbackQuery.getData(),
-                    callbackQuery.getInlineMessageId());
+            // buttonTap(
+            // callbackQuery.getFrom().getId(),
+            // callbackQuery.getId(),
+            // callbackQuery.getData(),
+            // callbackQuery.getInlineMessageId());
+
+            buttonTap(callbackQuery);
             return;
         }
 
@@ -104,7 +108,7 @@ public class Bot extends TelegramLongPollingBot {
 
                     for (int i = 0; i < apr.length(); i++) {
                         Long approverId = Long.valueOf(apr.getString(i));
-                        sendApplicationForApproval(from.getId(), approverId, description);
+                        sendApplicationForApproval(from, approverId, description);
                     }
                     return;
                 }
@@ -125,14 +129,69 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    private void buttonTap(Long fromId, String id, String data, String messageId) {
+    // private void buttonTap(Long fromId, String id, String data, String messageId)
+    // {
+    // System.out.println("callbackData = " + data);
+
+    // if (data.equals(approveButtonCallbackData)) {
+
+    // } else if (data.equals(rejectButtonCallbackData)) {
+
+    // }
+    // }
+
+    private void buttonTap(CallbackQuery callbackQuery) {
+        String data = callbackQuery.getData();
+
+        User from = callbackQuery.getFrom();
+        Integer messageId = callbackQuery.getMessage().getMessageId();
+        String text = callbackQuery.getMessage().getText();
+        String queryId = callbackQuery.getId();
+
         System.out.println("callbackData = " + data);
 
+        EditMessageText newText = EditMessageText.builder()
+                .chatId(from.getId().toString())
+                .messageId(messageId)
+                .parseMode("HTML")
+                .text("")
+                .build();
+        EditMessageReplyMarkup newMarkup = EditMessageReplyMarkup.builder()
+                .chatId(from.getId().toString())
+                .messageId(messageId)
+                .replyMarkup(null)
+                .build();
+
         if (data.equals(approveButtonCallbackData)) {
+            newText.setParseMode("HTML");
+            newText.setText(text + "\n" + "<b>✅ Согласовано</b>");
+
+            // действия при "Согласовано"
+
+            AnswerCallbackQuery close = AnswerCallbackQuery.builder()
+                    .callbackQueryId(queryId)
+                    .build();
+            try {
+                execute(newText);
+                execute(newMarkup);
+                execute(close);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+            return;
 
         } else if (data.equals(rejectButtonCallbackData)) {
+            newText.setParseMode("HTML");
+            newText.setText(text + "\n" + "<b>❌ Отказано</b>");
 
+            // действия при "Отказано"
+
+            KeyboardButton button = KeyboardButton.builder()
+                    .text(createApplicationToApproveButtonText)
+                    .webApp(new WebAppInfo(webAppUrlRejectApplication))
+                    .build();
         }
+        return;
     }
 
     private void sendStart(Message message) {
@@ -164,19 +223,25 @@ public class Bot extends TelegramLongPollingBot {
         sendText(userId, DbConnection.instance.getSubscribersId().toString());
     }
 
-    private void sendApplicationForApproval(Long userId, Long approverId, String description) {
+    private void sendApplicationForApproval(User from, Long approverId, String description) {
         InlineKeyboardButton approve = InlineKeyboardButton.builder()
-                .text(approveButtonText).callbackData(approveButtonCallbackData)
+                .text(approveButtonText)
+                .callbackData(approveButtonCallbackData)
                 .build();
         InlineKeyboardButton reject = InlineKeyboardButton.builder()
-                .text(rejectButtonText).callbackData(rejectButtonCallbackData)
+                .text(rejectButtonText)
+                .callbackData(rejectButtonCallbackData)
+                .webApp(new WebAppInfo(webAppUrlRejectApplication))
                 .build();
         InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
                 .keyboardRow(List.of(approve, reject))
                 .build();
+
+        String text = "<b>Заявка от @" + from.getUserName() + "</b>\n" + description;
         SendMessage sm = SendMessage.builder()
                 .chatId(approverId.toString())
-                .text(description)
+                .parseMode("HTML")
+                .text(text)
                 .replyMarkup(markup)
                 .build();
 
