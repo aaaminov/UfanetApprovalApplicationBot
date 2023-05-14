@@ -63,8 +63,8 @@
 
 
 <!-- content -->
-<body class="gray">
 
+<body class="gray">
     <div>
         <h3>Описание заявки</h3>
         <input id="description" type="text" placeholder="Текст" />
@@ -85,7 +85,7 @@
         </select>
     </div>
 
-    <div style="width: 200px;">
+    <div style="width: var(--tg-viewport-width, 200px);">
         <h3 class="hint">Test</h3>
         <p id="test_p"></p>
         <div class="hint">
@@ -113,7 +113,7 @@
 
 
     let approvers = document.getElementById("approvers");
-    
+
     function get_selected_approvers() {
         var selected = [];
         for (var option of approvers.options) {
@@ -126,11 +126,11 @@
 
     function check_visibility_main_button() {
         if (description.value.length != 0 && get_selected_approvers().length != 0) {
-            if (!tg.MainButton.isVisible){
+            if (!tg.MainButton.isVisible) {
                 tg.MainButton.show();
             }
-        }else{
-            if (tg.MainButton.isVisible){
+        } else {
+            if (tg.MainButton.isVisible) {
                 tg.MainButton.hide();
             }
         }
@@ -141,7 +141,7 @@
         description_length.innerHTML = `${text.length.toString()}/${description_max_length}`;
         check_visibility_main_button();
     });
-    approvers.addEventListener('change', function(e) {
+    approvers.addEventListener('change', function (e) {
         // description.value = get_selected_approvers().toString();
         check_visibility_main_button();
         document.focus();
@@ -149,10 +149,10 @@
 
 
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
-        if (description.value.length == 0){
+        if (description.value.length == 0) {
             return;
         }
-        else if (get_selected_approvers().length == 0){
+        else if (get_selected_approvers().length == 0) {
             return;
         } else {
             // tg.sendData(`${get_selected_approvers()}.${description.value}`);
