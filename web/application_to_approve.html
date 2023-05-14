@@ -59,7 +59,6 @@
 
 
 <!-- content -->
-
 <body class="gray">
 
     <div>
@@ -82,16 +81,6 @@
         </select>
     </div>
 
-    <!-- <div>
-        <p>test:</p>
-        <div id="usercard"></div>
-        <a class="link" href="#">Link</a>
-        <p class="hint">Some little hint</p>
-        <button id="btn" class="button">Show/Hide Main Button</button>
-        <button id="btnED" class="button">Enable/Disable Main Button</button>
-    </div> -->
-
-
 </body>
 
 
@@ -103,7 +92,9 @@
     let description = document.getElementById("description");
     description.focus();
 
-    let description_max_length = 256 // max desc length
+    let description_max_length = 15 // max desc length
+    description.setAttribute('maxlength', description_max_length);
+
     let description_length = document.getElementById("description_length");
     description_length.innerHTML = `0/${description_max_length}`;
 
@@ -153,7 +144,6 @@
         check_visibility_main_button();
     });
     approvers.addEventListener('change', function(e) {
-        // description.value = e.target.value;
         // description.value = get_selected_approvers().toString();
         check_visibility_main_button();
         document.focus();
