@@ -70,7 +70,8 @@
 
 
     <div>
-        <p id="tg_info"></p>
+        <p id="tg_info1"></p>
+        <p id="tg_info2"></p>
     </div>
 
 </body>
@@ -124,12 +125,14 @@
     });
 
 
-    let tg_info = document.getElementById("tg_info");
+    let tg_info1 = document.getElementById("tg_info1");
+    let tg_info2 = document.getElementById("tg_info2");
 
     let initDataURLSP = new URLSearchParams(WebApp.initData);
     var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
 
-    tg_info.innerHTML = `${tg.WebAppInitData.query_id}\n${checkDataString}`
+    tg_info1.innerHTML = tg.WebAppInitData.query_id;
+    tg_info2.innerHTML = checkDataString;
 
 
     // пример проверки безопасности
