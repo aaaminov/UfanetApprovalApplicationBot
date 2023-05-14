@@ -3,13 +3,16 @@ package org.tgbot.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppData;
@@ -24,10 +27,18 @@ public class Bot extends TelegramLongPollingBot {
     private String botUsername = "NeverKetBot";
     private String botToken = "5848728893:AAENlDxAuca7sJZtKc5rvUy-b00T0ecVOjg";
 
-    private String webAppUrl = "https://aaaminov.github.io/UfanetApprovalApplicationBot/web/index.html";
+    private String webAppUrlApplicationToApprove = "https://aaaminov.github.io/UfanetApprovalApplicationBot/web/application_to_approve.html";
+    private String webAppUrlRejectApplication = "https://aaaminov.github.io/UfanetApprovalApplicationBot/web/reject_application.html";
 
     private String startMessageText = "Привет";
-    private String keyboardButtonText = "Создать заявку";
+
+    private String createApplicationToApproveButtonText = "Создать заявку";
+
+    private String approveButtonText = "Согласовать";
+    private String approveButtonCallbackData = "approve";
+
+    private String rejectButtonText = "Отказать";
+    private String rejectButtonCallbackData = "reject";
 
     @Override
     public String getBotUsername() {
@@ -67,29 +78,25 @@ public class Bot extends TelegramLongPollingBot {
         if (webAppData != null) {
             System.out.println("webAppData = " + webAppData);
 
-            if (webAppData.getButtonText().equals(keyboardButtonText)) {
-                // String dataStr = webAppData.getData();
-                // System.out.println("dataStr = " + dataStr);
-
-                // String[] data = webAppData.getData().split(".", 2);
-                // System.out.println("data = " + data.toString());
-
-                // String[] approvers = data[0].split(",");
-                // System.out.println("approvers = " + approvers.toString());
-                
-                // String description = data[1];
-                // System.out.println("description = " + description);
-
-                // for (int i = 0; i < approvers.length; i++) {
-                //     Long approverId = Long.valueOf(approvers[i]);
-                //     System.out.println("approverId = " + approverId);
-                    
-                //     sendText(approverId, description);
-                // }
-
+            if (webAppData.getButtonText().equals(createApplicationToApproveButtonText)) {
                 JSONObject data = new JSONObject(webAppData.getData());
-                
+                JSONArray apr = data.getJSONArray("apr");
+                String description = data.getString("des");
+
+                for (int i = 0; i < apr.length(); i++) {
+                    Long approverId = Long.valueOf(apr.getString(i));
+                    sendApplicationForApproval(message.getFrom().getId(), approverId, description);
+                }
+                return;
             }
+
+            return;
+        }
+
+        if (update.hasCallbackQuery()){
+            String callbackData = update.getCallbackQuery().getData()
+            
+            System.out.println("callbackData = " + callbackData);
             return;
         }
 
@@ -106,29 +113,25 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     private void sendStart(Message message) {
-        SendMessage sm = new SendMessage();
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
-        List<KeyboardRow> keyboardRows = new ArrayList<>();
-        KeyboardRow keyboardRow = new KeyboardRow();
+        KeyboardButton button = KeyboardButton.builder()
+                .text(createApplicationToApproveButtonText)
+                .webApp(new WebAppInfo(webAppUrlApplicationToApprove))
+                .build();
 
-        WebAppInfo webAppInfo = new WebAppInfo(webAppUrl);
-        KeyboardButton button = new KeyboardButton(keyboardButtonText, null, null, null, webAppInfo);
+        ReplyKeyboardMarkup markup = ReplyKeyboardMarkup.builder()
+                .keyboardRow(new KeyboardRow(List.of(button)))
+                .build();
 
-        keyboardRow.add(button);
-        keyboardRows.add(keyboardRow);
-
-        replyKeyboardMarkup.setKeyboard(keyboardRows);
-        replyKeyboardMarkup.setResizeKeyboard(true);
-        replyKeyboardMarkup.setSelective(true);
-
-        sm.setReplyMarkup(replyKeyboardMarkup);
-        sm.setText(startMessageText);
-        sm.setChatId(message.getChatId().toString());
+        SendMessage sm = SendMessage.builder()
+                .chatId(message.getChatId().toString())
+                .text(startMessageText)
+                .replyMarkup(markup)
+                .build();
 
         executeMessage(sm);
     }
 
-    public void sendText(Long userId, String msg) {
+    private void sendText(Long userId, String msg) {
         SendMessage sm = SendMessage.builder()
                 .chatId(userId.toString())
                 .text(msg + "").build();
@@ -137,6 +140,28 @@ public class Bot extends TelegramLongPollingBot {
 
     private void sendApprovers(Long userId) {
         sendText(userId, DbConnection.instance.getSubscribersId().toString());
+    }
+
+    private void sendApplicationForApproval(Long userId, Long approverId, String description) {
+        InlineKeyboardButton approve = InlineKeyboardButton.builder()
+                .text(approveButtonText).callbackData(approveButtonCallbackData)
+                .build();
+
+        InlineKeyboardButton reject = InlineKeyboardButton.builder()
+                .text(rejectButtonText).callbackData(rejectButtonCallbackData)
+                .build();
+
+        InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
+                .keyboardRow(List.of(approve, reject))
+                .build();
+
+        SendMessage sm = SendMessage.builder()
+                .chatId(approverId.toString())
+                .text(description)
+                .replyMarkup(markup)
+                .build();
+
+        executeMessage(sm);
     }
 
 }

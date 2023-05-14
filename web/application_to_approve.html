@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="MobileOptimized" content="176" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title></title>
+    <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
+    <script>
+        function setThemeClass() {
+            document.documentElement.className = Telegram.WebApp.colorScheme;
+        }
+        Telegram.WebApp.onEvent('themeChanged', setThemeClass);
+        setThemeClass();
+    </script>
+</head>
+
+
+<!-- css -->
+<style>
+    body {
+        background: var(--tg-theme-bg-color);
+        color: var(--tg-theme-text-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 18px;
+    }
+
+    .hint {
+        color: var(--tg-theme-hint-color);
+    }
+
+    .link {
+        color: var(--tg-theme-link-color);
+    }
+
+    .button {
+        background: var(--tg-theme-button-color);
+        color: var(--tg-theme-button-text-color);
+        border: none;
+        font-size: 18px;
+    }
+
+    .button:not(:last-child) {
+        margin-bottom: 20px
+    }
+
+    #usercard {
+        text-align: center;
+    }
+</style>
+
+
+<!-- content -->
+
+<body class="gray">
+
+    <div>
+        <h3>Описание заявки</h3>
+        <input id="description" type="text" placeholder="Текст" />
+        <p id="description_length" class="hint"></p>
+    </div>
+
+    <div>
+        <h3>Согласователи</h3>
+        <select id="approvers" multiple>
+            <option value="1002202976">
+                <img>
+                <p>@neverket - Arslan</p>
+            </option>
+            <option value="857862919">
+                <img>
+                <p>@aaaaminov - Arslan</p>
+            </option>
+        </select>
+    </div>
+
+    <!-- <div>
+        <p>test:</p>
+        <div id="usercard"></div>
+        <a class="link" href="#">Link</a>
+        <p class="hint">Some little hint</p>
+        <button id="btn" class="button">Show/Hide Main Button</button>
+        <button id="btnED" class="button">Enable/Disable Main Button</button>
+    </div> -->
+
+
+</body>
+
+
+<!-- js -->
+<script>
+    let tg = window.Telegram.WebApp; //получаем объект WebApp телеграма
+    tg.MainButton.hide()
+
+    let description = document.getElementById("description");
+    description.focus();
+
+    let description_max_length = 256 // max desc length
+    let description_length = document.getElementById("description_length");
+    description_length.innerHTML = `0/${description_max_length}`;
+
+
+    let approvers = document.getElementById("approvers");
+    
+    function get_selected_approvers() {
+        var selected = [];
+        for (var option of approvers.options) {
+            if (option.selected) {
+                selected.push(option.value);
+            }
+        }
+        return selected;
+    }
+
+    function check_visibility_main_button() {
+        // if (description.value.length == 0){
+        //     if (tg.MainButton.isVisible){
+        //         tg.MainButton.hide();
+        //     }
+        // }
+        // else if (get_selected_approvers().length == 0){
+        //     if (tg.MainButton.isVisible){
+        //         tg.MainButton.hide();
+        //     }
+        // } else {
+        //     if (!tg.MainButton.isVisible){
+        //         tg.MainButton.show();
+        //     }
+        // }
+
+        if (description.value.length != 0 && get_selected_approvers().length != 0) {
+            if (!tg.MainButton.isVisible){
+                tg.MainButton.show();
+            }
+        }else{
+            if (tg.MainButton.isVisible){
+                tg.MainButton.hide();
+            }
+        }
+    }
+
+    description.addEventListener('input', function (e) {
+        let text = this.value;
+        description_length.innerHTML = `${text.length.toString()}/${description_max_length}`;
+        check_visibility_main_button();
+    });
+    approvers.addEventListener('change', function(e) {
+        // description.value = e.target.value;
+        // description.value = get_selected_approvers().toString();
+        check_visibility_main_button();
+        document.focus();
+    });
+
+
+    // tg.expand(); //расширяем на все окно  
+
+    // tg.MainButton.text = "Changed Text"; //изменяем текст кнопки 
+    // tg.MainButton.setText("Changed Text1"); //изменяем текст кнопки иначе
+    // tg.MainButton.textColor = "#F55353"; //изменяем цвет текста кнопки
+    // tg.MainButton.color = "#143F6B"; //изменяем цвет бэкграунда кнопки
+    // tg.MainButton.setParams({ "color": "#143F6B" }); //так изменяются все параметры
+
+    // let btn = document.getElementById("btn"); //получаем кнопку скрыть/показать 
+
+    // btn.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
+    //     if (tg.MainButton.isVisible) { //если кнопка показана 
+    //         tg.MainButton.hide() //скрываем кнопку 
+    //     }
+    //     else { //иначе
+    //         tg.MainButton.show() //показываем 
+    //     }
+    // });
+
+    // let btnED = document.getElementById("btnED"); //получаем кнопку активировать/деактивировать
+    // btnED.addEventListener('click', function () { //вешаем событие на нажатие html-кнопки
+    //     if (tg.MainButton.isActive) { //если кнопка показана 
+    //         tg.MainButton.setParams({ "color": "#E0FFFF" }); //меняем цвет
+    //         tg.MainButton.disable() //скрываем кнопку 
+    //     }
+    //     else { //иначе
+    //         tg.MainButton.setParams({ "color": "#143F6B" }); //меняем цвет
+    //         tg.MainButton.enable() //показываем 
+    //     }
+    // });
+
+    Telegram.WebApp.onEvent('mainButtonClicked', function () {
+        if (description.value.length == 0){
+            return;
+        }
+        else if (get_selected_approvers().length == 0){
+            return;
+        } else {
+            // tg.sendData(`${get_selected_approvers()}.${description.value}`);
+
+            let data = {
+                apr: get_selected_approvers(),
+                des: description.value
+            }
+
+            tg.sendData(JSON.stringify(data));
+        }
+        //при клике на основную кнопку отправляем данные в строковом виде
+    });
+
+
+    // let usercard = document.getElementById("usercard"); //получаем блок usercard 
+
+    // let profName = document.createElement('p'); //создаем параграф
+    // profName.innerText = `${tg.initDataUnsafe.user.first_name}
+    //     ${tg.initDataUnsafe.user.last_name}
+    //     ${tg.initDataUnsafe.user.username} (${tg.initDataUnsafe.user.language_code})`;
+    // //выдем имя, "фамилию", через тире username и код языка
+    // usercard.appendChild(profName); //добавляем 
+
+    // let userid = document.createElement('p'); //создаем еще параграф 
+    // userid.innerText = `${tg.initDataUnsafe.user.id}`; //показываем user_id
+    // usercard.appendChild(userid); //добавляем
+
+
+    //работает только в attachment menu
+    // let pic = document.createElement('img'); //создаем img
+    // pic.src = tg.initDataUnsafe.user.photo_url; //задаём src
+    // usercard.appendChild(pic); //добавляем элемент в карточку 
+</script>
+
+</html>

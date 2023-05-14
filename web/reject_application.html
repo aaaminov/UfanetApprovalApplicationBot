@@ -63,13 +63,13 @@
 <body class="gray">
 
     <div>
-        <h3>Описание заявки</h3>
+        <h3>reject_application</h3>
         <input id="description" type="text" placeholder="Текст" />
         <p id="description_length" class="hint"></p>
     </div>
 
     <div>
-        <h3>Согласователи</h3>
+        <h3>reject_application lol</h3>
         <select id="approvers" multiple>
             <option value="1002202976">
                 <img>
@@ -154,7 +154,7 @@
     });
     approvers.addEventListener('change', function(e) {
         // description.value = e.target.value;
-        description.value = get_selected_approvers().toString();
+        // description.value = get_selected_approvers().toString();
         check_visibility_main_button();
         document.focus();
     });
