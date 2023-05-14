@@ -67,6 +67,11 @@
         <p id="reason_length" class="hint"></p>
     </div>
 
+    
+    <div>
+        <p id="tg_info" ></p>
+    </div>
+
 </body>
 
 
@@ -111,11 +116,17 @@
             let data = {
                 rea: reason.value
             }
-
-            tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
+            tg.answerWebAppQuery();
+            // tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
         }
         
     });
+
+
+    let tg_info = document.getElementById("tg_info");
+    tg_info.innerHTML = tg.initData
+
+
 </script>
 
 </html>

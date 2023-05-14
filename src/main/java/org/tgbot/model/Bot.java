@@ -44,6 +44,9 @@ public class Bot extends TelegramLongPollingBot {
     private String rejectButtonText = "Отказать";
     private String rejectButtonCallbackData = "reject";
 
+    private String actionsButtonText = "Действия";
+    private String actionsButtonCallbackData = "actions";
+
     @Override
     public String getBotUsername() {
         return botUsername;
@@ -56,20 +59,6 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-
-        // если нажимаются кнопки
-        if (update.hasCallbackQuery()) {
-            CallbackQuery callbackQuery = update.getCallbackQuery();
-
-            // buttonTap(
-            // callbackQuery.getFrom().getId(),
-            // callbackQuery.getId(),
-            // callbackQuery.getData(),
-            // callbackQuery.getInlineMessageId());
-
-            buttonTap(callbackQuery);
-            return;
-        }
 
         // если приходят сообщения
         if (update.hasMessage()) {
@@ -85,7 +74,12 @@ public class Bot extends TelegramLongPollingBot {
             if (message.isCommand()) {
                 switch (message.getText()) {
                     case "/start": {
-                        sendStart(message);
+                        sendMenu(from, startMessageText);
+                        break;
+                    }
+                    case "/menu":
+                    case "/back": {
+                        sendMenu(from, "Главное меню");
                         break;
                     }
                     case "/approvers": {
@@ -119,6 +113,15 @@ public class Bot extends TelegramLongPollingBot {
             // echo bot
             sendText(from.getId(), message.getText());
         }
+
+        // если нажимаются кнопки
+        if (update.hasCallbackQuery()) {
+            CallbackQuery callbackQuery = update.getCallbackQuery();
+
+            buttonTap(callbackQuery);
+            return;
+        }
+
     }
 
     private void executeMessage(SendMessage sendMessage) {
@@ -131,13 +134,7 @@ public class Bot extends TelegramLongPollingBot {
 
     // private void buttonTap(Long fromId, String id, String data, String messageId)
     // {
-    // System.out.println("callbackData = " + data);
 
-    // if (data.equals(approveButtonCallbackData)) {
-
-    // } else if (data.equals(rejectButtonCallbackData)) {
-
-    // }
     // }
 
     private void buttonTap(CallbackQuery callbackQuery) {
@@ -162,6 +159,46 @@ public class Bot extends TelegramLongPollingBot {
                 .replyMarkup(null)
                 .build();
 
+        // if (data.equals(actionsButtonCallbackData)) {
+
+        // KeyboardButton approve = KeyboardButton.builder()
+        // .text(approveButtonText)
+        // .build();
+        // KeyboardButton reject = KeyboardButton.builder()
+        // .text(rejectButtonText)
+        // .webApp(new WebAppInfo(webAppUrlRejectApplication))
+        // .build();
+        // KeyboardButton back = KeyboardButton.builder()
+        // .text("/back")
+        // .build();
+
+        // ReplyKeyboardMarkup markup = ReplyKeyboardMarkup.builder()
+        // .keyboardRow(new KeyboardRow(List.of(approve, reject)))
+        // .keyboardRow(new KeyboardRow(List.of(back)))
+        // .resizeKeyboard(true)
+        // .selective(true)
+        // .build();
+        // SendMessage sm = SendMessage.builder()
+        // .chatId(from.getId().toString())
+        // .text("Выберите действия для заявки от @" + from.getUserName())
+        // .replyMarkup(markup)
+        // .build();
+
+        // AnswerCallbackQuery close = AnswerCallbackQuery.builder()
+        // .callbackQueryId(queryId)
+        // .build();
+        // try {
+        // execute(sm);
+        // execute(close);
+        // } catch (TelegramApiException e) {
+        // e.printStackTrace();
+        // }
+
+        // return;
+        // }
+        // else
+
+
         if (data.equals(approveButtonCallbackData)) {
             newText.setParseMode("HTML");
             newText.setText(text + "\n" + "<b>✅ Согласовано</b>");
@@ -180,21 +217,22 @@ public class Bot extends TelegramLongPollingBot {
             }
             return;
 
-        } else if (data.equals(rejectButtonCallbackData)) {
-            newText.setParseMode("HTML");
-            newText.setText(text + "\n" + "<b>❌ Отказано</b>");
+        } 
+        // else if (data.equals(rejectButtonCallbackData)) {
+        //     newText.setParseMode("HTML");
+        //     newText.setText(text + "\n" + "<b>❌ Отказано</b>");
 
-            // действия при "Отказано"
+        //     // действия при "Отказано"
 
-            KeyboardButton button = KeyboardButton.builder()
-                    .text(createApplicationToApproveButtonText)
-                    .webApp(new WebAppInfo(webAppUrlRejectApplication))
-                    .build();
-        }
+        //     KeyboardButton button = KeyboardButton.builder()
+        //             .text(createApplicationToApproveButtonText)
+        //             .webApp(new WebAppInfo(webAppUrlRejectApplication))
+        //             .build();
+        // }
         return;
     }
 
-    private void sendStart(Message message) {
+    private void sendMenu(User from, String text) {
         KeyboardButton button = KeyboardButton.builder()
                 .text(createApplicationToApproveButtonText)
                 .webApp(new WebAppInfo(webAppUrlApplicationToApprove))
@@ -205,8 +243,8 @@ public class Bot extends TelegramLongPollingBot {
                 .selective(true)
                 .build();
         SendMessage sm = SendMessage.builder()
-                .chatId(message.getChatId().toString())
-                .text(startMessageText)
+                .chatId(from.getId().toString())
+                .text(text)
                 .replyMarkup(markup)
                 .build();
         executeMessage(sm);
@@ -230,9 +268,13 @@ public class Bot extends TelegramLongPollingBot {
                 .build();
         InlineKeyboardButton reject = InlineKeyboardButton.builder()
                 .text(rejectButtonText)
-                .callbackData(rejectButtonCallbackData)
                 .webApp(new WebAppInfo(webAppUrlRejectApplication))
                 .build();
+
+        // InlineKeyboardButton actions = InlineKeyboardButton.builder()
+        // .text(actionsButtonText)
+        // .webApp(new WebAppInfo(webAppUrlRejectApplication))
+        // .build();
         InlineKeyboardMarkup markup = InlineKeyboardMarkup.builder()
                 .keyboardRow(List.of(approve, reject))
                 .build();
