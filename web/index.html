@@ -198,8 +198,7 @@
         else if (get_selected_approvers().length == 0){
             return;
         } else {
-            tg.sendData(`test`);
-            tg.MainButton.text = tg.MainButton.text + " lol2";
+            tg.sendData(`${get_selected_approvers()}.${description.value}`);
         }
         //при клике на основную кнопку отправляем данные в строковом виде
     });
