@@ -37,6 +37,14 @@
         font-size: 18px;
     }
 
+    input {
+        width: var(--tg-viewport-width);
+        background-color: var(--tg-theme-secondary-bg-color);
+        color: var(--tg-theme-text-color);
+        font-size: 20px;
+
+    }
+
     .hint {
         color: var(--tg-theme-hint-color);
     }
@@ -50,6 +58,7 @@
         color: var(--tg-theme-button-text-color);
         border: none;
         font-size: 18px;
+        border: 0px solid var(--tg-theme-hint-color);
     }
 
     .button:not(:last-child) {
@@ -77,10 +86,6 @@
             App version: <span id="ver"></span>,
             platform: <span id="platform"></span>
         </div>
-    </div>
-
-    <div style="width: 200px">
-        <p id="test_p"></p>
     </div>
 
 </body>
@@ -120,27 +125,29 @@
         if (reason.value.length == 0) {
             return;
         } else {
+
+            // test
+            let test_p = document.getElementById("test_p");
+
+            let initDataURLSP = new URLSearchParams(tg.initData);
+            var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
+            let query_id = initDataURLSP.toString().split("&", 1)[0];
+
+            test_p.innerHTML = query_id;
+
+
             let data = {
-                rea: reason.value
+                query_id: query_id,
+                rsn: reason.value
             }
-            
-            alert(data);
-            // tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
+            alert(JSON.stringify(data));
         }
 
     });
 
 
     // test
-    let test_p = document.getElementById("test_p");
-
-    let initDataURLSP = new URLSearchParams(tg.initData);
-    var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
-    let query_id = initDataURLSP.toString().split("&", 1)[0];
-
-    test_p.innerHTML = query_id;
-
-    document.getElementById('ver').innerHTML = "q";
+    document.getElementById('ver').innerHTML = "qweqwr";
     document.getElementById('platform').innerHTML = `${Telegram.WebApp.platform} ${Telegram.WebApp.version}`;
 
 
