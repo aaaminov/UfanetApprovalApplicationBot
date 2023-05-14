@@ -109,20 +109,6 @@
     });
 
 
-    Telegram.WebApp.onEvent('mainButtonClicked', function () {
-        if (reason.value.length == 0) {
-            return;
-        }
-        else if (get_selected_approvers().length == 0) {
-            return;
-        } else {
-            let data = {
-                rea: reason.value
-            }
-            // tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
-        }
-
-    });
 
     
     let tg_info = document.getElementById("tg_info");
@@ -138,7 +124,26 @@
     tg_info1.innerHTML = "lol1 " + tg.WebAppInitData;
     tg_info2.innerHTML = "lol2 " + checkDataString;
 
-    tg.answerWebAppQuery(query_id, "lol");
+
+
+    Telegram.WebApp.onEvent('mainButtonClicked', function () {
+        if (reason.value.length == 0) {
+            return;
+        }
+        else if (get_selected_approvers().length == 0) {
+            return;
+        } else {
+            let data = {
+                rea: reason.value
+            }
+            var lll = tg.answerWebAppQuery(query_id, "lol");
+            alert(lll);
+            // tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
+        }
+
+    });
+
+    
 
 
 
