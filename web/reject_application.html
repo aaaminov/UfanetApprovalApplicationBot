@@ -83,24 +83,6 @@
     let tg = window.Telegram.WebApp; //получаем объект WebApp телеграма
     tg.MainButton.hide()
 
-
-
-    let tg_info = document.getElementById("tg_info");
-    let tg_info1 = document.getElementById("tg_info1");
-    let tg_info2 = document.getElementById("tg_info2");
-
-    let initDataURLSP = new URLSearchParams(tg.initData);
-    var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
-
-    tg_info.innerHTML = "lol " + tg.initData;
-    tg_info1.innerHTML = "lol1 " + tg.WebAppInitData;
-    tg_info2.innerHTML = "lol2 " + checkDataString;
-
-    alert(tg.initData);
-
-
-
-
     let reason = document.getElementById("reason");
     reason.focus();
 
@@ -137,11 +119,28 @@
             let data = {
                 rea: reason.value
             }
-            tg.answerWebAppQuery();
             // tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
         }
 
     });
+
+    
+    let tg_info = document.getElementById("tg_info");
+    let tg_info1 = document.getElementById("tg_info1");
+    let tg_info2 = document.getElementById("tg_info2");
+
+    let initDataURLSP = new URLSearchParams(tg.initData);
+    var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
+
+    let query_id = initDataURLSP.toString().split("&", 1)[0];
+
+    tg_info.innerHTML = "lol " + tg.initData;
+    tg_info1.innerHTML = "lol1 " + tg.WebAppInitData;
+    tg_info2.innerHTML = "lol2 " + checkDataString;
+
+    tg.answerWebAppQuery(query_id, "lol");
+
+
 
 
     // пример проверки безопасности
