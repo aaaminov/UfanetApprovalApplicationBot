@@ -129,9 +129,6 @@
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
         if (reason.value.length == 0) {
             return;
-        }
-        else if (get_selected_approvers().length == 0) {
-            return;
         } else {
             let data = {
                 rea: reason.value
