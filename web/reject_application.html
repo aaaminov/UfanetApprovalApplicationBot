@@ -24,6 +24,10 @@
 
 <!-- css -->
 <style>
+    html {
+        font-family: Arial, sans-serif;
+    }
+
     body {
         background: var(--tg-theme-bg-color);
         color: var(--tg-theme-text-color);
@@ -75,9 +79,12 @@
 
 
     <div style="width: 200px;">
-        <p id="tg_info"></p>
-        <p id="tg_info1"></p>
-        <p id="tg_info2"></p>
+        <h3 class="hint">Test</h3>
+        <p id="test_p"></p>
+        <div class="hint">
+            App version: <span id="ver"></span>,
+            platform: <span id="platform"></span>
+        </div>
     </div>
 
 </body>
@@ -113,24 +120,6 @@
         check_visibility_main_button();
     });
 
-
-
-    
-    let tg_info = document.getElementById("tg_info");
-    let tg_info1 = document.getElementById("tg_info1");
-    let tg_info2 = document.getElementById("tg_info2");
-
-    let initDataURLSP = new URLSearchParams(tg.initData);
-    var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
-
-    let query_id = initDataURLSP.toString().split("&", 1)[0];
-
-    tg_info.innerHTML = "lol " + tg.initData;
-    tg_info1.innerHTML = "lol1 " + tg.WebAppInitData;
-    tg_info2.innerHTML = "lol2 " + checkDataString;
-
-
-
     Telegram.WebApp.onEvent('mainButtonClicked', function () {
         if (reason.value.length == 0) {
             return;
@@ -138,22 +127,30 @@
             let data = {
                 rea: reason.value
             }
-            alert("0");
-            var lll = tg.answerWebAppQuery(query_id, data);
-            alert("123");
+            
+            alert(data);
             // tg.sendData(JSON.stringify(data)); //при клике на основную кнопку отправляем данные в строковом виде
         }
 
     });
 
-    document.getElementById('ver').innerHTML = 1.09;
+
+    // test
+    let test_p = document.getElementById("test_p");
+
+    let initDataURLSP = new URLSearchParams(tg.initData);
+    var checkDataString = initDataURLSP.toString().replaceAll('&', '\n');
+    let query_id = initDataURLSP.toString().split("&", 1)[0];
+
+    test_p.innerHTML = query_id;
+
+    document.getElementById('ver').innerHTML = "q";
     document.getElementById('platform').innerHTML = `${Telegram.WebApp.platform} ${Telegram.WebApp.version}`;
 
 
 
-
-
     // пример проверки безопасности
+
 
     // let initDataURLSP = new URLSearchParams(WebApp.initData);
     // var hash = initDataURLSP.get('hash');

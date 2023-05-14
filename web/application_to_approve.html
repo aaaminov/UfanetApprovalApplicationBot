@@ -24,6 +24,10 @@
 
 <!-- css -->
 <style>
+    html {
+        font-family: Arial, sans-serif;
+    }
+
     body {
         background: var(--tg-theme-bg-color);
         color: var(--tg-theme-text-color);
@@ -79,6 +83,15 @@
                 <p>@aaaaminov - Arslan</p>
             </option>
         </select>
+    </div>
+
+    <div style="width: 200px;">
+        <h3 class="hint">Test</h3>
+        <p id="test_p"></p>
+        <div class="hint">
+            App version: <span id="ver"></span>,
+            platform: <span id="platform"></span>
+        </div>
     </div>
 
 </body>
@@ -152,7 +165,12 @@
             tg.sendData(JSON.stringify(data)); // при клике на основную кнопку отправляем данные в строковом виде
         }
     });
-    
+
+
+    // test
+    document.getElementById('ver').innerHTML = "q";
+    document.getElementById('platform').innerHTML = `${Telegram.WebApp.platform} ${Telegram.WebApp.version}`;
+
 </script>
 
 </html>
