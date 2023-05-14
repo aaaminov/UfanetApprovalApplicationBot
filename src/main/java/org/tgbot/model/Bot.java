@@ -26,10 +26,11 @@ import org.tgbot.db.DbConnection;
 
 public class Bot extends TelegramLongPollingBot {
 
-    // private String botUsername = "UfanetApprovalApplicationBot";
-    // private String botToken = "6230219510:AAEhCAZN7YRDLLBU2cPIKo2v18lg3NL83aw";
-    private String botUsername = "NeverKetBot";
-    private String botToken = "5848728893:AAENlDxAuca7sJZtKc5rvUy-b00T0ecVOjg";
+    private String botUsername = "UfanetApprovalApplicationBot";
+    private String botToken = "6230219510:AAEhCAZN7YRDLLBU2cPIKo2v18lg3NL83aw";
+    
+    // private String botUsername = "NeverKetBot";
+    // private String botToken = "5848728893:AAENlDxAuca7sJZtKc5rvUy-b00T0ecVOjg";
 
     private String webAppUrlApplicationToApprove = "https://aaaminov.github.io/UfanetApprovalApplicationBot/web/application_to_approve.html";
     private String webAppUrlRejectApplication = "https://aaaminov.github.io/UfanetApprovalApplicationBot/web/reject_application.html";
@@ -59,7 +60,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        System.out.println("update = " + update);
+        // System.out.println("update = " + update);
 
         // если приходят сообщения
         if (update.hasMessage()) {
@@ -78,8 +79,7 @@ public class Bot extends TelegramLongPollingBot {
                         sendMenu(from, startMessageText);
                         break;
                     }
-                    case "/menu":
-                    case "/back": {
+                    case "/menu": {
                         sendMenu(from, "Главное меню");
                         break;
                     }
@@ -133,11 +133,6 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    // private void buttonTap(Long fromId, String id, String data, String messageId)
-    // {
-
-    // }
-
     private void buttonTap(CallbackQuery callbackQuery) {
         String data = callbackQuery.getData();
 
@@ -159,46 +154,6 @@ public class Bot extends TelegramLongPollingBot {
                 .messageId(messageId)
                 .replyMarkup(null)
                 .build();
-
-        // if (data.equals(actionsButtonCallbackData)) {
-
-        // KeyboardButton approve = KeyboardButton.builder()
-        // .text(approveButtonText)
-        // .build();
-        // KeyboardButton reject = KeyboardButton.builder()
-        // .text(rejectButtonText)
-        // .webApp(new WebAppInfo(webAppUrlRejectApplication))
-        // .build();
-        // KeyboardButton back = KeyboardButton.builder()
-        // .text("/back")
-        // .build();
-
-        // ReplyKeyboardMarkup markup = ReplyKeyboardMarkup.builder()
-        // .keyboardRow(new KeyboardRow(List.of(approve, reject)))
-        // .keyboardRow(new KeyboardRow(List.of(back)))
-        // .resizeKeyboard(true)
-        // .selective(true)
-        // .build();
-        // SendMessage sm = SendMessage.builder()
-        // .chatId(from.getId().toString())
-        // .text("Выберите действия для заявки от @" + from.getUserName())
-        // .replyMarkup(markup)
-        // .build();
-
-        // AnswerCallbackQuery close = AnswerCallbackQuery.builder()
-        // .callbackQueryId(queryId)
-        // .build();
-        // try {
-        // execute(sm);
-        // execute(close);
-        // } catch (TelegramApiException e) {
-        // e.printStackTrace();
-        // }
-
-        // return;
-        // }
-        // else
-
 
         if (data.equals(approveButtonCallbackData)) {
             newText.setParseMode("HTML");
@@ -245,7 +200,10 @@ public class Bot extends TelegramLongPollingBot {
                 .build();
         SendMessage sm = SendMessage.builder()
                 .chatId(from.getId().toString())
-                .text(text)
+                .parseMode("HTML")
+                .text(text + "\n\n" + 
+                "Команды:\n" + 
+                "/approvers - Список согласователей")
                 .replyMarkup(markup)
                 .build();
         executeMessage(sm);
