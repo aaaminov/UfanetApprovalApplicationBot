@@ -28,7 +28,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private String botUsername = "UfanetApprovalApplicationBot";
     private String botToken = "6230219510:AAEhCAZN7YRDLLBU2cPIKo2v18lg3NL83aw";
-    
+
     // private String botUsername = "NeverKetBot";
     // private String botToken = "5848728893:AAENlDxAuca7sJZtKc5rvUy-b00T0ecVOjg";
 
@@ -60,7 +60,7 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        // System.out.println("update = " + update);
+        System.out.println("update = " + update);
 
         // если приходят сообщения
         if (update.hasMessage()) {
